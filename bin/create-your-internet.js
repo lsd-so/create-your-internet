@@ -178,10 +178,31 @@ const copyRelevantFiles = () => {
 }
 
 const assistWithIndexTS = () => {
-  // Depending on whether or not the browser is installed
-  // [.on()] it
+  const target = readline.question("What URL are you interested in? [https://lsd.so]: ");
+  fs.writeFileSync("index.ts", `import drop from "internetdata";
+import { z } from "zod";
 
-  // here is where we ask the user about the web data they want
+const run = async () => {
+  const trip = await drop.tab();
+
+  const pageSchema = z.array(
+    z.object({
+      title: z.string(),
+    }),
+  );
+
+  const pageTitle = await trip
+    // If you have the Bicycle installed you can control a browser locally https://lsd.so/bicycle
+    // .on('${hasBicycle ? "BROWSER" : "TRAVERSER"}')
+    .navigate('${target}')
+    .select('title')
+    .extrapolate<typeof pageSchema>(pageSchema);
+
+  console.log("What is the title of the page at [${target}]?");
+  console.log(pageTitle);
+};
+
+run();`);
 }
 
 const copyDefaultIndexTS = () => {
@@ -199,16 +220,17 @@ const run = async () => {
   );
 
   const docsTitle = await trip
+    // If you have the Bicycle installed you can control a browser locally https://lsd.so/bicycle
     // .on('${hasBicycle ? "BROWSER" : "TRAVERSER"}')
     .navigate('https://lsd.so/docs')
     .select('title')
     .extrapolate<typeof docsSchema>(docsSchema);
 
-  console.log("What is the tile of the database docs page?");
+  console.log("What is the title of the database docs page?");
   console.log(docsTitle);
 };
 
-run();`)
+run();`);
 }
 
 const initNewProject = (packageManager, projectName) => {
@@ -263,6 +285,7 @@ const createYourInternet = () => {
   copyRelevantFiles();
   initNewProject(preferredPackageManager, projectName);
 
+  // Assisting with the entry point file
   const assistWithCode = shouldAssistWithCode();
   console.log(`Should we assist with code? ${assistWithCode}`);
   if (assistWithCode === "y") {
