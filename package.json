@@ -1,0 +1,9 @@
+{
+  "name": "create-your-internet",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "internetdata": "^1.1.15"
+  }
+}
