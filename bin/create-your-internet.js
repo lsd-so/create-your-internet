@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const { execSync } = require('child_process');
-const { constants } = require('fs');
 const fs = require('fs');
 const { accessSync } = require('fs/promises');
 const os = require('os');
@@ -12,8 +11,7 @@ const which = require('which');
 function isExecutableInPath(command) {
   try {
     const path = which.sync(command);
-    accessSync(path, constants.X_OK);
-    return true;
+    return path.length > 0;
   } catch {
     return false;
   }
@@ -143,7 +141,7 @@ const authWizard = () => {
   if (!authenticated) {
     const shouldAssist = shouldAssistWithAuth();
     if (shouldAssist === "y") {
-      await assistWithLSDAuth();
+      assistWithLSDAuth();
     }
   }
 }
@@ -154,7 +152,7 @@ const bicycleWizard = () => {
     const shouldAssist = shouldAssistWithBicycle();
 
     if (shouldAssist === "y") {
-      await assistWithBicycle();
+      assistWithBicycle();
     }
   }
 }
@@ -188,7 +186,7 @@ const assistWithIndexTS = () => {
 
 const copyDefaultIndexTS = () => {
   const hasBicycle = isBicycleInstalled();
-  fs.writeSync("index.ts", `import drop from "internetdata";
+  fs.writeFileSync("index.ts", `import drop from "internetdata";
 import { z } from "zod";
 
 const run = async () => {
@@ -201,7 +199,7 @@ const run = async () => {
   );
 
   const docsTitle = await trip
-    .on('${hasBicycle ? "BROWSER" : "TRAVERSER"}')
+    // .on('${hasBicycle ? "BROWSER" : "TRAVERSER"}')
     .navigate('https://lsd.so/docs')
     .select('title')
     .extrapolate<typeof docsSchema>(docsSchema);
@@ -266,7 +264,8 @@ const createYourInternet = () => {
   initNewProject(preferredPackageManager, projectName);
 
   const assistWithCode = shouldAssistWithCode();
-  if (assistWithCode) {
+  console.log(`Should we assist with code? ${assistWithCode}`);
+  if (assistWithCode === "y") {
     assistWithIndexTS()
   } else {
     copyDefaultIndexTS();
