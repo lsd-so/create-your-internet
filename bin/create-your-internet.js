@@ -87,8 +87,10 @@ const shouldAssistWithBicycle = () => {
 }
 
 const assistWithLSDAuth = () => {
-  console.log(`Click on the following URL and/or create an account then go
-to your profile and create an API key.`);
+  console.log(`Click on the following URL to create an account
+then go to your profile and create an API key.
+
+https://lsd.so/signin`);
 
   const user = readline.question("Enter your username (the email you used to sign in): ");
   const password = readline.question("Enter your API key: ");
@@ -100,12 +102,11 @@ to your profile and create an API key.`);
   }, null, 2));
 }
 
-const assistWithBicycle = async () => {
-  // Provide link to downloads page
-  // say to download bicycle and enter when done
+const assistWithBicycle = () => {
+  console.log(`Click on the following URL to download the Bicycle
+browser and hit enter when you're done.`)
 
-  // check and offer to assist as tail case if
-  // browser happens to not be installed at end
+  const _ = readline.question("Hit enter when you're done: ");
 }
 
 const isBicycleInstalled = () => {
@@ -137,20 +138,20 @@ const lsdAuthExists = () => {
   return false
 }
 
-const authWizard = async () => {
+const authWizard = () => {
   const authenticated = lsdAuthExists();
   if (!authenticated) {
-    const shouldAssist = await shouldAssistWithAuth();
+    const shouldAssist = shouldAssistWithAuth();
     if (shouldAssist === "y") {
       await assistWithLSDAuth();
     }
   }
 }
 
-const bicycleWizard = async () => {
+const bicycleWizard = () => {
   const hasBicycle = isBicycleInstalled();
   if (!hasBicycle) {
-    const shouldAssist = await shouldAssistWithBicycle();
+    const shouldAssist = shouldAssistWithBicycle();
 
     if (shouldAssist === "y") {
       await assistWithBicycle();
@@ -178,7 +179,7 @@ const copyRelevantFiles = () => {
   }, null, 2));
 }
 
-const assistWithIndexTS = async () => {
+const assistWithIndexTS = () => {
   // Depending on whether or not the browser is installed
   // [.on()] it
 
@@ -221,8 +222,8 @@ const initNewProject = (packageManager, projectName) => {
   }
 }
 
-const shouldAssistWithCode = async () => {
-  const answer = await askQuestion("Would you like help writing your internetdata integration (Y)es/(N)o? [Y]: ").toLowerCase();
+const shouldAssistWithCode = () => {
+  const answer = readline.question("Would you like help writing your internetdata integration (Y)es/(N)o? [Y]: ").toLowerCase();
   if (answer === "y" || answer.length === 0) {
     return "y"
   } else if (answer === "n") {
@@ -243,30 +244,30 @@ Get started by running the index.ts file:
 $ cd ${name} && npx ts-node index.ts`);
 }
 
-const createYourInternet = async () => {
+const createYourInternet = () => {
   console.clear();
 
   // Getting information for the project itself
-  const preferredPackageManager = await getPreferredPackageManager();
+  const preferredPackageManager = getPreferredPackageManager();
   const packageManagerInPath = isExecutableInPath(preferredPackageManager);
   if (!packageManagerInPath) {
     console.error(`Requested package manager [${preferredPackageManager}] however was not accessible in the path`);
     return;
   }
-  const projectName = await getPreferredProjectName();
+  const projectName = getPreferredProjectName();
 
   // Assisting with tooling for LSD projects
-  await authWizard();
-  await bicycleWizard();
+  authWizard();
+  bicycleWizard();
 
   // Assisting with the code scaffolding
   createProjectFolder(projectName);
   copyRelevantFiles();
   initNewProject(preferredPackageManager, projectName);
 
-  const assistWithCode = await shouldAssistWithCode();
+  const assistWithCode = shouldAssistWithCode();
   if (assistWithCode) {
-    await assistWithIndexTS()
+    assistWithIndexTS()
   } else {
     copyDefaultIndexTS();
   }
