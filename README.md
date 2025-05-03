@@ -18,4 +18,4 @@ $ npm create your-internet
 
 ## Issues
 
-Feel free to [file an issue](https://github.com/lsd-so/create-your-internet/issues/new/choose) or [submit a PR](https://github.com/lsd-so/create-your-internet/compare). More will be added to this over time.
+Feel free to [file an issue](https://github.com/lsd-so/create-your-internet/issues/new/choose) or [submit a PR](https://github.com/lsd-so/create-your-internet/compare). More will be added to this package over time.
