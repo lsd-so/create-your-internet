@@ -179,6 +179,8 @@ const copyRelevantFiles = () => {
 
 const assistWithIndexTS = () => {
   const target = readline.question("What URL are you interested in? [https://lsd.so]: ");
+
+  const hasBicycle = isBicycleInstalled();
   fs.writeFileSync("index.ts", `import drop from "internetdata";
 import { z } from "zod";
 
