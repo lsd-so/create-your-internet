@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "bin": {
+    "create-your-internet": "bin/create-your-internet.js"
+  },
   "dependencies": {
     "internetdata": "^1.1.15"
   }
