@@ -3,36 +3,24 @@
 const { execSync } = require('child_process');
 const { constants } = require('fs');
 const fs = require('fs');
-const { access } = require('fs/promises');
+const { accessSync } = require('fs/promises');
 const os = require('os');
 const path = require('path');
-const readline = require('readline');
+const readline = require('readline-sync');
 const which = require('which');
 
-async function isExecutableInPath(command) {
+function isExecutableInPath(command) {
   try {
-    const path = await which(command);
-    await access(path, constants.X_OK);
+    const path = which.sync(command);
+    accessSync(path, constants.X_OK);
     return true;
   } catch {
     return false;
   }
 }
 
-async function askQuestion(query) {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  return new Promise(resolve => rl.question(query, ans => {
-    rl.close();
-    resolve(ans);
-  }));
-}
-
-const getPreferredPackageManager = async () => {
-  const answer = await askQuestion("Do you prefer (npm) or (yarn)? [yarn]: ").toLowerCase();
+const getPreferredPackageManager = () => {
+  const answer = readline.question("Do you prefer (npm) or (yarn)? [yarn]: ").toLowerCase();
   if (answer === "yarn" || answer.length === 0) {
     return "yarn"
   } else if (answer === "npm") {
@@ -64,8 +52,8 @@ function isValidPackageName(name) {
   return true;
 }
 
-const getPreferredProjectName = async () => {
-  const answer = await askQuestion("What would you like to name your project? [my_project]: ");
+const getPreferredProjectName = () => {
+  const answer = readline.question("What would you like to name your project? [my_project]: ");
   if (answer.length === 0) {
     return "my_project"
   } else if (!isValidPackageName(answer)) {
@@ -76,8 +64,8 @@ const getPreferredProjectName = async () => {
   return answer;
 }
 
-const shouldAssistWithAuth = async () => {
-  const answer = await askQuestion("Would you like to connect to your LSD account (Y)es/(N)o? [Y]: ").toLowerCase();
+const shouldAssistWithAuth = () => {
+  const answer = readline.question("Would you like to connect to your LSD account (Y)es/(N)o? [Y]: ").toLowerCase();
   if (answer === "y" || answer.length === 0) {
     return "y"
   } else if (answer === "n") {
@@ -87,8 +75,8 @@ const shouldAssistWithAuth = async () => {
   }
 }
 
-const shouldAssistWithBicycle = async () => {
-  const answer = await askQuestion("Would you like to download the Bicycle browser (Y)es/(N)o? [Y]: ").toLowerCase();
+const shouldAssistWithBicycle = () => {
+  const answer = readline.question("Would you like to download the Bicycle browser (Y)es/(N)o? [Y]: ").toLowerCase();
   if (answer === "y" || answer.length === 0) {
     return "y"
   } else if (answer === "n") {
@@ -98,13 +86,18 @@ const shouldAssistWithBicycle = async () => {
   }
 }
 
-const assistWithLSDAuth = async () => {
-  console.log(`
-Click on the following URL and/or create an account then go to your profile
-and create an API key`
-  // Provide link to profle page
-  // say to create an API key and paste
-  // then write to .lsd in HOME
+const assistWithLSDAuth = () => {
+  console.log(`Click on the following URL and/or create an account then go
+to your profile and create an API key.`);
+
+  const user = readline.question("Enter your username (the email you used to sign in): ");
+  const password = readline.question("Enter your API key: ");
+
+  const configFilePath = path.join(os.homedir(), ".lsd");
+  fs.writeFileSync(configFilePath, JSON.stringify({
+    user,
+    password,
+  }, null, 2));
 }
 
 const assistWithBicycle = async () => {
@@ -255,7 +248,7 @@ const createYourInternet = async () => {
 
   // Getting information for the project itself
   const preferredPackageManager = await getPreferredPackageManager();
-  const packageManagerInPath = await isExecutableInPath(preferredPackageManager);
+  const packageManagerInPath = isExecutableInPath(preferredPackageManager);
   if (!packageManagerInPath) {
     console.error(`Requested package manager [${preferredPackageManager}] however was not accessible in the path`);
     return;
