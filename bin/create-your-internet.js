@@ -32,7 +32,7 @@ async function askQuestion(query) {
 }
 
 const getPreferredPackageManager = async () => {
-  const answer = await askQuestion("Do you prefer npm or yarn? [yarn] ").toLowerCase();
+  const answer = await askQuestion("Do you prefer (npm) or (yarn)? [yarn]: ").toLowerCase();
   if (answer === "yarn" || answer.length === 0) {
     return "yarn"
   } else if (answer === "npm") {
@@ -65,7 +65,7 @@ function isValidPackageName(name) {
 }
 
 const getPreferredProjectName = async () => {
-  const answer = await askQuestion("What would you like to name your project? [my_project] ");
+  const answer = await askQuestion("What would you like to name your project? [my_project]: ");
   if (answer.length === 0) {
     return "my_project"
   } else if (!isValidPackageName(answer)) {
@@ -77,7 +77,7 @@ const getPreferredProjectName = async () => {
 }
 
 const shouldAssistWithAuth = async () => {
-  const answer = await askQuestion("Would you like to connect to your LSD account Y/N? [Y]").toLowerCase();
+  const answer = await askQuestion("Would you like to connect to your LSD account (Y)es/(N)o? [Y]: ").toLowerCase();
   if (answer === "y" || answer.length === 0) {
     return "y"
   } else if (answer === "n") {
@@ -88,7 +88,7 @@ const shouldAssistWithAuth = async () => {
 }
 
 const shouldAssistWithBicycle = async () => {
-  const answer = await askQuestion("Would you like to download the Bicycle browser Y/N? [Y]").toLowerCase();
+  const answer = await askQuestion("Would you like to download the Bicycle browser (Y)es/(N)o? [Y]: ").toLowerCase();
   if (answer === "y" || answer.length === 0) {
     return "y"
   } else if (answer === "n") {
@@ -229,7 +229,7 @@ const initNewProject = (packageManager, projectName) => {
 }
 
 const shouldAssistWithCode = async () => {
-  const answer = await askQuestion("Would you like help writing your internetdata integration Y/N? [Y]").toLowerCase();
+  const answer = await askQuestion("Would you like help writing your internetdata integration (Y)es/(N)o? [Y]: ").toLowerCase();
   if (answer === "y" || answer.length === 0) {
     return "y"
   } else if (answer === "n") {
