@@ -1,6 +1,6 @@
 # create-your-internet
 
-![NPM Version](https://img.shields.io/npm/v/create-your-internet)
+[![NPM Version](https://img.shields.io/npm/v/create-your-internet)](https://www.npmjs.com/package/create-your-internet)
 
 This package provides a convenient shorthand for creating applications with [internetdata](https://github.com/lsd-so/internetdata).
 
