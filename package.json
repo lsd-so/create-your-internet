@@ -1,10 +1,10 @@
 {
-  "name": "create-your-internet",
-  "version": "1.1.0",
+  "name": "create-my-internet",
+  "version": "1.1.1",
   "main": "index.js",
   "license": "MIT",
   "bin": {
-    "create-your-internet": "bin/create-your-internet.js"
+    "create-my-internet": "bin/create-your-internet.js"
   },
   "dependencies": {
     "internetdata": "^1.1.15",
